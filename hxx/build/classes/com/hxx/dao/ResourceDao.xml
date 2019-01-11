@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hxx.dao.ResourceDao">
+	<insert id="addResource" parameterType="resource">
+		insert into
+		 t_resources(r_name,r_createtime,r_url,r_content,c_id,l_id,r_hot,r_pass)
+		values(#{rName},#{rCreatetime},#{rUrl},#{rContent},#{cId},#{lId},#{rHot},#{rPass})
+	</insert>
+	<!-- 根据资源ID查资源 -->
+	<select id="classify" parameterType="int" resultType="resource">
+		select*
+		from t_resources where l_id=#{lId}
+			and t_resources.r_pass=1
+
+	</select>
+	
+	<resultMap type="Resource" id="resourceMap">
+		<id column="r_id" property="rId" />
+		<result column="r_createtime" property="rCreatetime"/>
+		<result column="r_name" property="rName"/>
+		<result column="r_url" property="rUrl"/>
+		<result column="r_content" property="rContent"/>
+		<result column="r_pass" property="rPass"/>
+		<association property="lable" javaType="lable">
+			<result column="l_id" property="lId"/>
+			<result column="l_lable_name" property="lLableName"/>
+		</association>
+	</resultMap>
+	<!-- 根据用户ID查资源 -->
+	<select id="findbyCid" parameterType="int" resultMap="resourceMap">
+
+		SELECT
+		t_resources.*, t_lable.l_lable_name
+		FROM
+		t_resources,
+		t_lable
+		WHERE
+		t_lable.l_id =
+		t_resources.l_id
+		AND t_resources.c_id = #{cId}
+	</select>
+	
+	<resultMap type="Resource" id="resourceviewMap">
+		<id column="r_id" property="rId" />
+	
+		<result column="r_createtime" property="rCreatetime"/>
+		<result column="r_name" property="rName"/>
+		<result column="r_url" property="rUrl"/>
+		<result column="r_content" property="rContent"/>
+		<result column="r_pass" property="rPass"/>
+		<association property="lable" javaType="lable">
+			<result column="l_id" property="lId"/>
+			<result column="l_lable_name" property="lLableName"/>
+		</association>
+		<association property="customer" javaType="customer">
+			<result column="c_id" property="cId"/>
+			<result column="c_real_name" property="cRealName"/>
+		</association>
+	</resultMap>
+	
+	<!-- 资源详情 -->
+	<select id="findResourceByrId"  resultMap="resourceviewMap">
+		SELECT
+		t_resources.*, t_lable.l_lable_name,t_customer.c_real_name
+		FROM
+		t_resources,
+		t_lable,t_customer
+		WHERE
+		t_lable.l_id =
+		t_resources.l_id
+		AND t_resources.c_id = t_customer.c_id
+        and r_id=#{rId};
+	</select>
+	<!--搜索查询 -->
+	<select id="findResourceList" resultMap="resourceMap">
+		select
+		t_resources.*, t_lable.l_lable_name
+		from 
+		t_resources,
+		t_lable
+		<where>
+				
+		<if test="resourceName !=null and resourceName !='' ">
+		 t_resources.r_name like concat('%',#{resourceName},'%')
+ 			and t_resources.r_pass=1
+ 			and t_lable.l_id =
+		t_resources.l_id
+		</if>
+	</where>
+	</select>
+
+
+
+</mapper>

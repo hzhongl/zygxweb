@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hxx.dao.UserDao">
+	<!-- 管理员登录 -->
+	<select id="managerClient" parameterType="User"
+		resultType="User">
+		select * from t_user
+		<where>
+			<if test="uId!=null and uId!='' ">
+				u_id=#{uId}
+			</if>
+			<if test="uAccount!=null and uAccount!='' ">
+			 	u_account=#{uAccount}
+			</if>
+			<if test="uPassword!=null and uPassword!=''">
+				and u_password=#{uPassword}
+			</if>
+		</where>
+	</select>
+	<!-- 管理员忘记密码查询 -->
+	<select id="findPassword" parameterType="User"
+		resultType="User">
+		select * from t_user where u_account=#{uAccount} and u_real_name=#{uRealName} and u_id_number=#{uIdNumber} and u_phone=#{uPhone}
+	</select>
+	<!-- 添加管理员 -->
+	<insert id="addUser" parameterType="user">
+		insert into t_user (u_account,u_password,u_real_name,u_age,u_phone,u_id_number,u_email) 
+		values(#{uAccount},#{uPassword},#{uRealName},#{uAge},#{uPhone},#{uIdNumber},#{uEmail})
+	</insert>
+	<!-- 修改管理员信息 -->
+	<update id="updateUser" parameterType="User">
+		<if test="uId !=null and uId !='' ">
+			update t_user
+			<set>
+				<if test="uAccount !=null and uAccount !=''">
+					u_account=#{uAccount},
+				</if>
+				<if test="uPassword != null">
+					u_password=#{uPassword},
+				</if>
+				<if test="uRealName != null">
+					u_real_name=#{uRealName},
+				</if>
+				<if test="uAge != null">
+					u_Age=#{uAge},
+				</if>
+				<if test="uPhone != null">
+					u_phone=#{uPhone},
+				</if>
+				<if test="uIdNumber != null">
+					u_id_number=#{uIdNumber},
+				</if>
+				<if test="uEmail != null">
+					u_email=#{uEmail},
+				</if>
+			</set>
+			where u_id=#{uId}
+		</if>
+	</update>
+	<resultMap type="Resource" id="RC">
+		<id column="r_id" property="rId" />
+		<result column="r_createtime" property="rCreatetime"/>
+		<result column="r_name" property="rName"/>
+		<result column="r_url" property="rUrl"/>
+		<result column="r_content" property="rContent"/>
+		<result column="r_size" property="rSize"/>
+		<result column="r_hot" property="rHot"/>
+		<result column="r_pass" property="rPass"/>
+		<association property="customer" javaType="customer">
+			<result column="c_real_name" property="cRealName"/>
+			<result column="c_account" property="cAccount"/>
+		</association>
+		<association property="lable" javaType="lable">
+			<result column="l_lable_name" property="lLableName"/>
+		</association>
+	</resultMap>
+	<!-- 资源表单查询1 -->
+	<select id="findResourceList" resultMap="RC" >
+ 		SELECT r.*,c.c_real_name,c.c_account,l.l_lable_name FROM t_resources AS r JOIN t_customer AS c ON r.c_id=c.c_id JOIN t_lable AS l ON r.l_id=l.l_id
+ 		<where>
+ 			<if test="type !=null and type !='' ">
+				r.l_id=#{type}
+			</if>
+			<if test="resourceName !=null and resourceName !='' ">
+				and r.r_name like concat('%',#{resourceName},'%')
+			</if>
+		</where>
+	</select>
+	<!-- 资源表单查询2 -->
+	<select id="ResourceDetails" resultMap="RC"
+	parameterType="Resource">
+	SELECT r.*,c.c_real_name,c.c_account,l.l_lable_name FROM t_resources AS r JOIN t_customer AS c ON r.c_id=c.c_id JOIN t_lable AS l ON r.l_id=l.l_id where r.r_id=#{rId}
+	</select>
+	<!-- 资源表单查询3按cId -->
+	<select id="upResource" resultType="Resource" parameterType="Customer">
+	select * from t_resources where c_id=#{cId}
+	</select>
+	<!-- 资源审核 -->
+	<update id="changePass" parameterType="Resource">
+		update t_resources 
+		<set>
+			r_pass=#{rPass}
+		</set>
+		where r_id=#{rId}
+	</update>
+	<!-- 删除资源列表 -->
+	<delete id="deleteResource" parameterType="Resource">
+		delete from t_resources where r_id=#{rId}
+	</delete>
+	<!-- 添加热门资源 -->
+	<insert id="changeHot">
+		insert into t_hotresources (r_id) values(#{id})
+	</insert>
+	<!-- 删除热门资源 -->
+	<delete id="deleteHot" parameterType="Resource">
+		delete from t_hotresources where r_id=#{id}
+	</delete>
+	<!-- 修改热门热门资源 -->
+	<update id="updateHot" parameterType="Resource">
+		update t_resources 
+		<set>
+			r_hot=#{rHot}
+		</set>
+		where r_id=#{rId}
+	</update>
+	<!-- 客户表单查询1 -->
+	<select id="findCustomerList" resultType="Customer" >
+		select * from t_customer
+		<where>
+			<if test="type !=null and type !='' ">
+				c_type=#{type}
+			</if>	
+			<if test="customerAccount !=null and customerAccount !='' ">
+				and c_account like concat('%',#{customerAccount},'%')
+			</if>
+		</where>
+	</select>
+		<!-- 客户详情 -->
+	<select id="CustomerDetails" resultType="Customer" parameterType="Customer">
+		select * from t_customer
+		<where>
+			<if test="cId !=null and cId !='' ">
+				c_id=#{cId}
+			</if>
+		</where>
+	</select>
+	<!-- 客户账号状态 -->
+	<update id="changeCustomerType" parameterType="Customer">
+		update t_customer 
+		<set>
+			c_type=#{cType}
+		</set>
+		where c_id=#{cId}
+	</update>
+	<!-- 删除客户 -->
+	<delete id="deleteUser" parameterType="Integer">
+		delete from t_user
+		where user_id=#{userId}
+	</delete>
+	
+
+
+
+
+
+
+
+
+
+
+</mapper>

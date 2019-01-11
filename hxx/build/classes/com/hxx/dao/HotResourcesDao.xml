@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hxx.dao.HotResourcesDao">
+	<resultMap type="Resource" id="Hotresource">
+		<id column="r_id" property="rId" />
+		<result column="r_createtime" property="rCreatetime"/>
+		<result column="r_name" property="rName"/>
+		<result column="r_url" property="rUrl"/>
+		<result column="r_content" property="rContent"/>
+		<result column="l_id" property="lId"/>
+		<association property="hotresources" javaType="hotresources">
+			<result column="h_id" property="hId"/>
+			<result column="r_id" property="rId"/>
+		</association>
+	</resultMap>
+	<select id="findhotresources" resultMap="Hotresource">
+	SELECT
+		t_resources.*, t_hotresources.*
+		FROM
+		t_resources,
+		t_hotresources
+		WHERE
+		t_hotresources.r_id =
+		t_resources.r_id
+      	and t_resources.r_pass=1
+	</select>
+	</mapper>
