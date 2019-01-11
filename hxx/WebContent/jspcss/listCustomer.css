@@ -1,0 +1,79 @@
+@charset "UTF-8";
+
+body {
+	width: 100%;
+	height: 900px;
+}
+
+.head {
+	height: 6%;
+	width: 100%;
+	background-color: #fff226;
+}
+.head #add {
+	height: 100%;
+	width: 10%;
+	background-color: #fe9c0d;
+	text-align: center;
+	line-height: 40px;
+	float: left;
+}
+
+.head #add form {
+	background-color: #fff226;
+	width: 10%;
+	height: 35%;
+	position: absolute;
+	display: none;
+	z-index: 111;
+}
+
+.head #add form p input {
+	border: 2px black solid;
+	background-color: #ffd800;
+	padding-top: 0;
+}
+
+.head #add form #add2 {
+	height: 10%;
+	background-color: #ffd800;
+	border: 0px;
+}
+
+.head h2 {
+	float: left;
+	margin-left: 35%;
+}
+
+.head #addsearch {
+	margin-left: 88%;
+	padding-top:1%;
+}
+
+.head #addsearch #content {
+	border: 0px solid #fe9c0d;
+	background-color: #ffd800;
+}
+
+.head #addsearch #search {
+	border: 0px solid #fe9c0d;
+	background-color: #ffd800;
+	margin-left:2%;
+}
+
+#mid {
+	margin-top:1%;
+	width: 100%;
+	height: 83%;
+	position: absolute;
+	z-index: 100;
+}
+
+#mid table {
+	text-align: center;
+}
+
+table tr td #delete {
+	height: 25%;
+	width: 5%;
+}

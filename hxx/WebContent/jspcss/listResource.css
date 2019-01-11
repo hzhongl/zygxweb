@@ -1,0 +1,12 @@
+@charset "UTF-8";
+html, body {
+	width: 100%;
+	height: 900px;
+	background:url("../images/listResource.jpg") no-repeat;
+	background-size:cover;
+}
+
+form{
+	width:100%;
+	height:20%;
+}

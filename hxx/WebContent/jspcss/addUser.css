@@ -1,0 +1,32 @@
+@charset "UTF-8";
+html, body {
+	width: 100%;
+	height: 900px;
+	background:url("../images/listResource.jpg") no-repeat;
+	background-size:cover;
+}
+fieldset {
+	width:40%;
+	height:90%;
+	position: relative;
+	left: 30%;
+	top:5%;
+}
+fieldset legend{
+	font-family: cursive;
+	font-size: 32px;
+}
+fieldset form #button{
+	position: relative;
+	left: 45%;
+}
+@media all and (max-width:640px){
+	html{
+		width:100%;
+		height:100%;
+	}
+	body{
+		width:100%;
+		height:100%;
+	}
+}

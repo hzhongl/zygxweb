@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hxx.dao.CustomerDao">
+	<!-- 用户登录 -->
+	<select id="login" parameterType="Customer"
+		resultType="Customer">
+		select * from t_customer where c_account=#{cAccount} and c_password=#{cPassword}
+	</select>
+	<!-- 忘记密码查询 -->
+	<select id="findPassword" parameterType="Customer"
+		resultType="Customer">
+		select * from t_customer where c_account=#{cAccount} and c_nickname=#{cNickname} and c_id_number=#{uIdNumber} and u_phone=#{uPhone}
+	</select>
+	<!-- 注册 -->
+	<insert id="addCustomer" parameterType="Customer">
+		insert into
+		t_customer(c_account,c_password,c_real_name,c_age,c_phone,c_id_number,c_email,c_type)
+		values(#{cAccount},#{cPassword},#{cRealName},#{cAge},#{cPhone},#{cIdNumber},#{cEmail},#{cType})
+	</insert>
+
+</mapper>
